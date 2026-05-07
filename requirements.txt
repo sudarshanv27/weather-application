@@ -1,2 +1,4 @@
-flask
-requests
+flask==3.1.2
+requests==2.32.5
+python-dotenv==1.0.0
+gunicorn==21.2.0

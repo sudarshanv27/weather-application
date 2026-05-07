@@ -1,10 +1,20 @@
 from flask import Flask, render_template, request
 import requests
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 
-# Your OpenWeatherMap API key
-API_KEY = '4c108f2458202a2bc4038130ca9d350e'
+# Get API key from environment variable (SECURE!)
+API_KEY = os.getenv('OPENWEATHER_API_KEY')
+
+# Fallback for development (remove in production)
+if not API_KEY:
+    print("⚠️ Warning: OPENWEATHER_API_KEY not found in .env file")
+    API_KEY = 'your-api-key-here'  # Only for testing
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -30,7 +40,7 @@ def home():
                     'condition': data['weather'][0]['main']
                 }
             else:
-                error_message = f"City '{city}' not found. Please check the spelling and try again."
+                error_message = f"City '{city}' not found. Please check spelling."
     
     return render_template('weather.html', weather=weather_data, error=error_message)
 
